@@ -1,40 +1,36 @@
 async function insertDoc() {
-    const text = document.getElementById("insert").value;
-    const results = document.getElementById("results");
-    try {
-        const json = JSON.parse(text);
+  const text = document.getElementById("insert").value;
+  const results = document.getElementById("results");
 
-        const response = await fetch("/insert", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(json)
-        });
+  try {
+    JSON.parse(text); 
 
-        const data = await response.json();
-        results.textContent = JSON.stringify(data, null, 2);
+    const response = await fetch(
+      `/insert?data=${encodeURIComponent(text)}`
+    );
 
-    } catch (err) {
-        results.textContent = "Error: " + err.message;
-    }
+    const data = await response.json();
+    results.textContent = JSON.stringify(data, null, 2);
+
+  } catch (err) {
+    results.textContent = "Error: " + err.message;
+  }
 }
 
 async function searchDoc() {
-    const text = document.getElementById("search").value;
-    const results = document.getElementById("results");
+  const text = document.getElementById("search").value;
+  const results = document.getElementById("results");
 
-    try {
-        const json = JSON.parse(text);
+  try {
+    JSON.parse(text);
+    const response = await fetch(
+      `/search?data=${encodeURIComponent(text)}`
+    );
 
-        const response = await fetch("/search", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(json)
-        });
+    const data = await response.json();
+    results.textContent = JSON.stringify(data, null, 2);
 
-        const data = await response.json();
-        results.textContent = JSON.stringify(data, null, 2);
-
-    } catch (err) {
-        results.textContent = "Error: " + err.message;
-    }
+  } catch (err) {
+    results.textContent = "Error: " + err.message;
+  }
 }

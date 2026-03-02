@@ -2,13 +2,10 @@ const express = require('express');
 const nedb = require('nedb-promises');
 const app = express();
 const db = nedb.create('myfile.jsonl');
-app.use(express.json());
 app.use(express.static('public'));
-
-app.post('/insert', async (req, res) => {
+app.get('/insert', async (req, res) => {
   try {
-    const document = req.body;
-
+    const document = JSON.parse(req.query.data);
     const inserted = await db.insert(document);
 
     res.json({
@@ -23,11 +20,9 @@ app.post('/insert', async (req, res) => {
     });
   }
 });
-
-app.post('/search', async (req, res) => {
+app.get('/search', async (req, res) => {
   try {
-    const query = req.body;
-
+    const query = JSON.parse(req.query.data);
     const results = await db.find(query);
 
     res.json({
@@ -45,5 +40,5 @@ app.post('/search', async (req, res) => {
 app.use((req, res) => {
   res.status(404).send('Invalid URL.');
 });
-
 app.listen(3000, () => console.log('server started…'));
+
